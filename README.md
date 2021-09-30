@@ -36,6 +36,11 @@ python scrap_features.py -u https://about.gitlab.com/releases/2021/09/22/gitlab-
 python scrap_table.py -u https://about.gitlab.com/releases/2021/04/28/security-release-gitlab-13-11-2-released
 ```
 
+- `scrap_patch_release.py` is for scrap list of patch release page.
+```bash
+python scrap_patch_release.py -u https://about.gitlab.com/releases/2021/09/02/gitlab-13-12-11-released/ 
+```
+
 ## Development
 
 ### Install Dependencies
