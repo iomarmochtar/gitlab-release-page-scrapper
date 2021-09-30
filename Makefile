@@ -11,7 +11,7 @@ dev: setup
 	$(BINDIR)/pip install -r requirements/dev.txt
 
 unit-test:
-	$(BINDIR)/python -m unittest discover -s . -p 'test_*'
+	$(BINDIR)/python -m unittest discover -s tests -p 'test_*'
 
 lint:
 	$(BINDIR)/pylint shared.py scrap_*

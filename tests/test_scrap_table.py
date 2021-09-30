@@ -1,12 +1,12 @@
 import unittest
-from os.path import join
 from scrap_table import parse_table 
+from helpers import TestingWithFixture, TestCaseFixtures, TestCaseWithFixture
 
-class TestSeverityTables(unittest.TestCase):
+class TestSeverityTables(TestingWithFixture):
     def test_parse(self) -> None:
-        testcases = [
-            dict(
-                fixture='security_release_13-11-2_13-10-4_13-9-7.html',
+        testcases: TestCaseFixtures = [
+            TestCaseWithFixture(
+                fixture_file='security_release_13-11-2_13-10-4_13-9-7.html',
                 expected=[
                     {'key': 'Update Python dependency', 'value': 'Dependency Update - critical'},
                     {'key': 'Read API scoped tokens can execute mutations', 'value': 'high'},
@@ -21,23 +21,15 @@ class TestSeverityTables(unittest.TestCase):
                     {'key': 'DeployToken will impersonate a User with the same ID when using Dependency Proxy','value': 'low'}
                 ]
             ),
-            dict(
-                fixture='security_release_14-0-4.html',
+            TestCaseWithFixture(
+                fixture_file='security_release_14-0-4.html',
                 expected=[
                     {'value': 'critical', 'key': 'Arbitrary file read via design feature'},
                 ]
             )
         ]
 
-        for tc in testcases:
-            with open(join('fixtures', tc['fixture']), 'r') as fp:
-                actual = parse_table(fp.read())
-                self.assertListEqual(
-                    tc['expected'],
-                    actual,
-                )
-
+        self.with_fixtures(parse_table, testcases)
 
 if __name__ == '__main__':
     unittest.main()
-

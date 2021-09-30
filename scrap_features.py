@@ -3,21 +3,15 @@ scrap release page for feature points
 '''
 from typing import List, NewType, Dict, cast
 from bs4 import BeautifulSoup, element
-from shared import get_req, target_url_from_arg
+from shared import get_req, target_url_from_arg, join_resultset, join_tag_contents
 
 FeatureList = NewType('FeatureList', List[str])
 
-def join_tag_contents(tag: element.Tag) -> str:
+def join_resultset_featurelist(result_set: element.ResultSet) -> FeatureList:
     '''
-    get contents of tag
+    an helper for convert join_resultset result with type FeatureList
     '''
-    return ''.join([x.string for x in tag.contents])
-
-def join_resultset(result_set: element.ResultSet) -> FeatureList:
-    '''
-    an helper for iterrate the cleaned content tag from a result set
-    '''
-    return cast(FeatureList, [join_tag_contents(tag) for tag in result_set])
+    return cast(FeatureList, join_resultset(result_set))
 
 class ParseFeatures:
     '''
@@ -58,25 +52,25 @@ class ParseFeatures:
         '''
         parse list of key/highlighted features or improvements
         '''
-        return join_resultset(self._bs.select('div.column > h2 > p'))
+        return join_resultset_featurelist(self._bs.select('div.column > h2 > p'))
 
     def parse_improvements(self) -> FeatureList:
         '''
         parse list of non major improvements
         '''
-        return join_resultset(self._bs.select('div.secondary-column-feature > h3 > p'))
+        return join_resultset_featurelist(self._bs.select('div.secondary-column-feature > h3 > p'))
 
     def parse_deprecations(self) -> FeatureList:
         '''
         parse list of deprecations
         '''
-        return join_resultset(self._bs.select('section#deprecations > h3 > p'))
+        return join_resultset_featurelist(self._bs.select('section#deprecations > h3 > p'))
 
     def parse_removals(self) -> FeatureList:
         '''
         parse list of removals
         '''
-        return join_resultset(self._bs.select('section#removals > h3 > p'))
+        return join_resultset_featurelist(self._bs.select('section#removals > h3 > p'))
 
     @property
     def results(self) -> Dict[str, FeatureList]:

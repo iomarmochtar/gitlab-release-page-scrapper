@@ -2,11 +2,10 @@ from logging import NOTSET
 import unittest
 from os.path import join
 from scrap_features import ParseFeatures
-from scrap_table import parse_table 
 
 class TestParseFeatures(unittest.TestCase):
     def setUp(self) -> None:
-        with open(join('fixtures', 'major_release_14-0.html')) as fp:
+        with open(join('tests', 'fixtures', 'major_release_14-0.html')) as fp:
             self.obj = ParseFeatures(fp.read())
 
     def test_parse_bug_fixes(self) -> None:
